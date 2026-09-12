@@ -1107,10 +1107,31 @@ join(void)
 }
 
 static void
-scroll(int num)
+scroll(void)
 {
-	int max;
+	char *var;
+	int c, max, neg, num;
+	neg = num = 0;
+	if ((c = input()) == '-')
+		neg = 1;
+	else if (c != '+')
+		back(c);
 
+	if (isdigit(back(input())))
+		num = getnum();
+	else if ((var = getenv("LINES")) != NULL)
+		num = atoi(var) - 1;
+	if (num <= 0)
+		num = 23;
+	chkprint(1);
+	deflines(curln, curln);
+
+	if (neg) {
+		if (line1 < num)
+			line1 = 1;
+		else
+			line1 -= num;
+	}
 	if (!line1 || line1 == lastln)
 		error("incorrect address");
 
@@ -1120,6 +1141,9 @@ scroll(int num)
 	line2 = max;
 	nlines = line2 - line1 + 1;
 	doprint();
+	if (neg)
+		curln = line2 = line1;
+	pflag = 0;
 }
 
 static void
@@ -1435,18 +1459,7 @@ repeat:
 	case 'z':
 		if (nlines > 1)
 			goto bad_address;
-
-		num = 0;
-		if (isdigit(back(input())))
-			num = getnum();
-		else if ((var = getenv("LINES")) != NULL)
-			num = atoi(var) - 1;
-		if (num <= 0)
-			num = 23;
-		chkprint(1);
-		deflines(curln, curln);
-		scroll(num);
-		pflag = 0;
+		scroll();
 		break;
 	case 'k':
 		if (nlines > 1)

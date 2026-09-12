@@ -246,7 +246,7 @@ but after saving the
 .Ar file
 it exits with an exit status of 0
 independently of previous errors.
-.It (.,.) Ns Ic z Ns [ Ar n ] Ns [ Ic flags ]
+.It (.,.) Ns Ic z Ns [ Ic +- ] Ns [ Ar n ] Ns [ Ic flags ]
 Scrolls
 .Ar n
 lines starting at the addressed line.
@@ -256,7 +256,7 @@ is not specified then
 the value of $LINES - 1 is used.
 If the value of
 .Ar n
-is 0 or negative then the default value of 23 is used.
+is 0 then the default value of 23 is used.
 .It ($)=
 Print the line number of the addressed line.
 The dot is unchanged.
