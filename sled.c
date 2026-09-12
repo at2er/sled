@@ -1109,21 +1109,17 @@ join(void)
 static void
 scroll(int num)
 {
-	int max, ln, cnt;
+	int max;
 
 	if (!line1 || line1 == lastln)
 		error("incorrect address");
 
-	ln = line1;
 	max = line1 + num;
 	if (max > lastln)
 		max = lastln;
-	for (cnt = line1; cnt < max; cnt++) {
-		chksignals();
-		fputs(gettxt(ln), stdout);
-		ln = nextln(ln);
-	}
-	curln = ln;
+	line2 = max;
+	nlines = line2 - line1 + 1;
+	doprint();
 }
 
 static void
@@ -1450,6 +1446,7 @@ repeat:
 		chkprint(1);
 		deflines(curln, curln);
 		scroll(num);
+		pflag = 0;
 		break;
 	case 'k':
 		if (nlines > 1)
